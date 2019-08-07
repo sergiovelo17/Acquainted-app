@@ -33,7 +33,7 @@ class EventDetails extends Component {
     this.props.getUser();
     if(this.props.user){
     console.log(this.state.eventdetails._id)
-    axios.post(`http://localhost:5000/api/events/attendEvent`,{eventId: this.state.eventdetails._id, attending: this.state.attending},{
+    axios.post(`${process.env.REACT_APP_BASE}/events/attendEvent`,{eventId: this.state.eventdetails._id, attending: this.state.attending},{
       withCredentials: true
     })
     .then((response)=>{
@@ -114,7 +114,7 @@ handleMessage = (e) => {
 }
 sendMessage = (e) => {
   e.preventDefault();
-  axios.post(`http://localhost:5000/api/events/postToForum/${this.state.eventdetails._id}`,{
+  axios.post(`${process.env.REACT_APP_BASE}/events/postToForum/${this.state.eventdetails._id}`,{
   message: this.state.message
   },{withCredentials: true})
   .then((response)=>{
@@ -193,7 +193,7 @@ clickedInfo = () => {
     if(!this.state.stopReload){
     this.props.getUser();
     if(this.props.user){
-    axios.post(`http://localhost:5000/api/events/getSingleEvent/${this.props.match.params.id}`,{user_id: this.props.user._id},{withCredentials: true})
+    axios.post(`${process.env.REACT_APP_BASE}/events/getSingleEvent/${this.props.match.params.id}`,{user_id: this.props.user._id},{withCredentials: true})
     .then((response)=>{
       console.log('------------',response)
       if(response.data.attending === true){

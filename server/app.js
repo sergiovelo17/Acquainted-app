@@ -17,7 +17,7 @@ require('./configs/passport');
 
 mongoose.Promise = Promise;
 mongoose
-  .connect('mongodb://localhost/acquainted-server', {useNewUrlParser: true, useFindAndModify:false})
+  .connect(process.env/MONGODB_URI, {useNewUrlParser: true, useFindAndModify:false})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -66,8 +66,12 @@ app.locals.title = 'Express - Generated with IronGenerator';
 
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:3000', 'https://blah.herokuapp.com']
+  origin: ['http://localhost:3000', 'https://acquainted-app.herokuapp.com']
 }));
+
+app.use((req,res,next)=>{
+  res.sendFile(_dirname + "/public/index.html")
+})
 
 const index = require('./routes/index');
 app.use('/', index);

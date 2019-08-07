@@ -40,7 +40,7 @@ class EditProfile extends Component {
     const isAcquaintance = this.state.isAcquaintance;
     const description = this.state.description;
     axios
-      .post("http://localhost:5000/api/user/editProfile",
+      .post(`${process.env.REACT_APP_BASE}/user/editProfile`,
         {
           username: username,
           email: email,

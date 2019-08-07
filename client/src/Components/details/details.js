@@ -29,7 +29,7 @@ class Details extends Component {
         if (this.props.user) {
           axios
             .post(
-              `http://localhost:5000/api/places/placeDetails/${id}`,
+              `${process.env.REACT_APP_BASE}/places/placeDetails/${id}`,
               { user_id: this.props.user._id },
               { withCredentials: true }
             )
@@ -138,7 +138,7 @@ class Details extends Component {
     if (this.props.user) {
       axios
         .post(
-          `http://localhost:5000/api/places/addToFavoritePlaces/${
+          `${process.env.REACT_APP_BASE}/places/addToFavoritePlaces/${
             this.state.details._id
           }`,
           { favorited: this.state.favorited },

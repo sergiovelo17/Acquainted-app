@@ -51,7 +51,7 @@ class Events extends Component {
     if (!this.state.stopReload) {
       axios
         .get(
-          `http://localhost:5000/api/events/getEvents/${this.props.user._id}`
+          `${process.env.REACT_APP_BASE}/events/getEvents/${this.props.user._id}`
         )
         .then(response => {
           console.log(response.data);

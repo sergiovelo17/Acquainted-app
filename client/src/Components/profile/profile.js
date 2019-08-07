@@ -40,7 +40,7 @@ class Profile extends Component {
   };
 
   getLatLng = () =>{
-    axios.post('http://localhost:5000/api/user/latlng',{},{withCredentials:true})
+    axios.post(`${process.env.REACT_APP_BASE}/user/latlng`,{},{withCredentials:true})
     .then((response)=>{
       console.log(response);
       this.setState({lat: response.data.lat, lng: response.data.lng})

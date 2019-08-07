@@ -25,7 +25,7 @@ class CreateEvent extends Component {
     const title = this.state.title;
     const location = this.state.location;
     const description = this.state.description;
-    axios.post("http://localhost:5000/api/events/createEvent",{
+    axios.post(`${process.env.REACT_APP_BASE}/events/createEvent`,{
     time: time,
     title: title,
     location: location,
