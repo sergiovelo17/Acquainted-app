@@ -1,0 +1,51 @@
+.user-form-body{
+  margin-top: 50px;
+  border: #555B6E 0.25px solid;
+}
+.user-from-body *{
+  padding: 10px;
+}
+
+.tabs .tab a.active {
+  background-color: transparent;
+  color: #FF934F !important;
+}
+.tabs .tab a {
+  background-color: transparent;
+  color: #FF934F !important;
+}
+
+/* label underline focus color */
+input[type=text]:focus {
+     border-bottom: 1px solid #87BCDE !important;
+     box-shadow: 0 1px 0 0 #87BCDE !important
+}
+.switch label input[type=checkbox]:checked+.lever{
+  background-color: #87BCDE !important;
+}
+
+*{
+  color: #555B6E
+}
+/* .login-tabs{
+  margin-top: 20px;
+} */
+.form-content{
+  padding: 20px;
+}
+
+.bottom-of-signup > .switch,
+.bottom-of-signup > legend{
+  padding: 20px 0;
+}
+.form-button{
+  background-color: #FF934F;
+  color: #555B6E
+}
+#login-button{
+  margin-top: 15px; 
+}
+.form-button:hover{
+  background-color: #87BCDE;
+  color:white;
+}

@@ -1,0 +1,45 @@
+/* .carousel .thumb img {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.carousel .slide img {
+  max-height: 400px;  /* change this to whatever you want */
+  /* width: auto;
+} */ 
+.carousel-slider{
+  box-shadow: 0px 5px 10px 8px rgba(162, 162, 162, 0.262);
+  max-height: 250px;
+}
+.thumb{
+  height: 80px !important;
+  position: center;
+  object-fit: contain !important;
+}
+
+#details-carousel{
+  padding: 80px 0 0 100px;
+}
+.eachReview{
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 5px 10px 8px rgba(162, 162, 162, 0.262);
+  margin: 10px 3%;
+}
+.eachReview *{
+  margin-top: 5px;
+}
+#place-reviews{
+  display: flex;
+  flex-wrap: wrap;
+}
+.addFavoritesButton{
+  margin-top: 10px;
+  background-color: #FF934F;
+  color: #555B6E;
+}
+.favoritedButton{
+  margin-top: 10px;
+  background-color: #87BCDE;
+  color: #555B6E;
+}
