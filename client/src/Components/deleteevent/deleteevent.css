@@ -1,0 +1,12 @@
+.delete-buttons{
+  background-color: #FF934F;
+  color: #555B6E;
+}
+.delete-buttons:hover{
+  background-color: #555B6E;
+  color: #FF934F;
+}
+.buttons-container-delete{
+  display: flex;
+  justify-content: space-around;
+}

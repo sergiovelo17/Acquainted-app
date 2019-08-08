@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Link, Switch } from "react-router-dom";
 import AuthService from "../../services/AuthService";
-import "./profile.css";
+import "../profile/profile.css";
 import M from "materialize-css";
 import axios from "axios";
 import Moment from "react-moment";
@@ -15,25 +15,17 @@ class Profile extends Component {
     favorites: true,
     upcomingEvents: false,
     pastEvents: false,
-    username: "",
-    city: "",
-    email: "",
-    name: "",
-    lat: null,
-    lng: null,
   };
   service = new AuthService();
   componentDidMount = () => {
     let tabs = document.querySelectorAll(".tabs");
     let instance = M.Tabs.init(tabs, {});
-    var elems = document.querySelectorAll(".modal");
-    var modalInstances = M.Modal.init(elems, {});
+    this.getProfileInfo()
   };
   componentDidUpdate = () => {
     let tabs = document.querySelectorAll(".tabs");
     let instance = M.Tabs.init(tabs, {});
-    var elems = document.querySelectorAll(".modal");
-    var modalInstances = M.Modal.init(elems, {});
+    this.getProfileInfo()
   };
 
   
@@ -183,8 +175,31 @@ class Profile extends Component {
     );
   };
   getProfileInfo = () => {
-   
+  if(!this.state.stopReload){
+  this.props.getUser()
+  if(this.props.user){
+    axios.get(`${process.env.REACT_APP_BASE}/user/otherUser/${this.props.match.params.id}`)
+    .then((response)=>{
+      console.log(response);
+      if (response.data.isAcquaintance === true) {
+        this.setState({
+          stopReload: true,
+          userForProfile: response.data,
+          acquaintance: true,
+        });
+      } else {
+        this.setState({
+          stopReload: true,
+          userForProfile: response.data,
+        });
+      }
+      console.log('worked')
+    })
+  }else{
+    this.props.history.push('/account/login')
+  }
   };
+}
   showInfo = () => {
     console.log(this.state.userForProfile);
     return (
@@ -234,7 +249,6 @@ class Profile extends Component {
     if (this.props.ready) {
       return (
         <div>
-          {this.getProfileInfo()}
           {this.state.userForProfile && this.showInfo()}
         </div>
       );

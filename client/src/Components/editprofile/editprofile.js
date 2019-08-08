@@ -11,7 +11,8 @@ class EditProfile extends Component {
     email: this.props.user.email,
     name: this.props.user.name,
     isAcquaintance: this.props.user.isAcquaintance,
-    description: this.props.user.profileDescription
+    description: this.props.user.profileDescription,
+    userImage: null
   };
   service = new AuthService();
   componentDidMount = () => {
@@ -30,31 +31,47 @@ class EditProfile extends Component {
     e.preventDefault()
     this.setState({ [e.target.name]: e.target.value})
   };
+  handlePicture = (e) => {
+   this.setState({userImage: e.target.files[0]})
+    // else {
+    //   document.getElementById('edit-form-modal').submit();
+    // }
+  }
   submitEditForm = e => {
-    console.log('hi')
     e.preventDefault()
+    console.log(this.state.userImage)
     const username = this.state.username;
     const email = this.state.email;
     const name = this.state.name;
     const city = this.state.city;
     const isAcquaintance = this.state.isAcquaintance;
     const description = this.state.description;
+    const userImg = this.state.userImage;
+
+    let theRequest = new FormData();
+    theRequest.append('username', username)
+    theRequest.append('email', email)
+    theRequest.append('name', name)
+    theRequest.append('city', city)
+    theRequest.append('isAcquaintance', isAcquaintance)
+    theRequest.append('description', description)
+    theRequest.append('userImg', this.state.userImage)
+
+
     axios
-      .post(`${process.env.REACT_APP_BASE}/user/editProfile`,
-        {
-          username: username,
-          email: email,
-          name: name,
-          city: city,
-          isAcquaintance: isAcquaintance,
-          profileDescription: description
-        },
+      .post(`${process.env.REACT_APP_BASE}/user/editProfile`, theRequest,
         { withCredentials: true }
       )
       .then(response => {
+        console.log(response);
         this.props.updateUser(response)
       });
   };
+
+  setInput = (el) => {
+    this.imageInput = el
+  }
+
   render() {
     return (
       <div>
@@ -97,6 +114,8 @@ class EditProfile extends Component {
                 onChange={this.handleChange}
                 name="description"
               />
+              <legend>Upload an image</legend>
+              <input type='file' onChange={this.handlePicture} name='userImage' />
               <legend>Acquaintance</legend>
               {!this.state.isAcquaintance && (
                 <div class="switch">

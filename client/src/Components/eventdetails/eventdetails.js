@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import "../useroptions/useroptions.css";
-import { Route, Link, Switch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AuthService from "../../services/AuthService";
 import Details from '../details/details'
 import axios from "axios";
 import '../details/details.css';
 import './eventdetails.css'
 import Moment from 'react-moment';
+import momentJS from 'moment'
 import M from 'materialize-css';
+import EditEvent from '../editEvent/editEvent'
+import DeleteEvent from '../deleteevent/deleteevent'
 
 class EventDetails extends Component {
   state = {
@@ -17,17 +20,23 @@ class EventDetails extends Component {
     acquaintance: true,
     listOfAttendees: false,
     discussion: false,
-    message: ''
+    message: '',
+    isOwner: false,
+    updatedLocation: false
   }
   service = new AuthService();
   
   componentDidMount = () => {
     let tabs = document.querySelectorAll(".tabs");
     let instance = M.Tabs.init(tabs, {});
+    var elems = document.querySelectorAll(".modal");
+    var modalInstances = M.Modal.init(elems, {});
   }
   componentDidUpdate = () => {
     let tabs = document.querySelectorAll(".tabs");
     let instance = M.Tabs.init(tabs, {});
+    var elems = document.querySelectorAll(".modal");
+    var modalInstances = M.Modal.init(elems, {});
   }
   attend = () => {
     this.props.getUser();
@@ -48,13 +57,15 @@ class EventDetails extends Component {
 }
 showParticipants = () => {
   console.log(this.state.eventdetails.discussion)
+  if(this.state.eventdetails.discussion.participants){
   return this.state.eventdetails.discussion.participants.map((each)=>{
     return(
       <div className='user-participants left-align'>
-      <Link exact to=''>@{each.username}</Link>
+      <Link exact to={`/userProfile/${each._id}`}>@{each.username}</Link>
       </div>
     )
   })
+  }
 }
 toggle = (e) =>{
     if(e.target.name === 'acquaintance' && this.state.acquaintance === false){
@@ -80,7 +91,7 @@ showMessages = () => {
     if(eachMessage.createdBy._id === this.props.user._id){
     return(
       <div className='right-align'>
-      <p className='user-message-name'>Me</p>
+      <i><p className='user-message-name'>Me</p></i>
       <div className='user-chat-container'>
       <div className='user-message'>
       <div className='content-message-container'>
@@ -88,12 +99,14 @@ showMessages = () => {
        </div>
        </div>
        </div>
+       {momentJS(eachMessage.createdAt).fromNow()}
+       {/* <Moment fromNow>{eachMessage.createdAt}</Moment> */}
       </div>
     )
     }else{
       return(
       <div className='left-align'>
-      <p className='user-message-name'>{eachMessage.createdBy.username}</p>
+      <i><p className='user-message-name'>{eachMessage.createdBy.username}</p></i>
       <div className='chat-container'>
       <div className='other-user-message'>
       <div className='content-message-container'>
@@ -101,6 +114,7 @@ showMessages = () => {
        </div>
        </div>
        </div>
+       <Moment fromNow>{eachMessage.createdAt}</Moment>
       </div>
       )
     }
@@ -127,7 +141,7 @@ clickedInfo = () => {
     return(
       <div>
         <img className="acquaintance-img" src={this.state.eventdetails.owner.profileImg}/>
-        <h4>Name: {this.state.eventdetails.owner.name} (@{this.state.eventdetails.owner.username})</h4>
+        <h4>Name: {this.state.eventdetails.owner.name}  <Link exact to={`/userProfile/${this.state.eventdetails.owner._id}`}>(@{this.state.eventdetails.owner.username})</Link></h4>
         <h5>From: {this.state.eventdetails.owner.acquaintedCity}</h5>
       </div>
     )
@@ -161,6 +175,22 @@ clickedInfo = () => {
     )
   }
 }
+redirect = () =>{
+  console.log('attempted redirect')
+  this.props.history.push('/profile')
+}
+renderLocation = (bypass) => {
+  if(this.state.updatedLocation){
+    console.log(bypass)
+  return(
+  <Details getUser={this.props.getUser} user={this.props.user} ready={this.props.ready} placeDetailsId={bypass.data.location.placeId}/>
+  )
+  }else{
+    return(
+      <Details getUser={this.props.getUser} user={this.props.user} ready={this.props.ready} placeDetailsId={this.state.eventdetails.location.placeId}/>
+      )
+  }
+}
   showEventDetails = () => {
     console.log('working')
     return(
@@ -171,12 +201,22 @@ clickedInfo = () => {
     <h2>{this.state.eventdetails.title}</h2>
     <Moment format="MM/DD/YYYY hh:mm a">{this.state.eventdetails.time}</Moment>
     <p>Event details: {this.state.eventdetails.description}</p>
+    <div className="eventButtons">
     {!this.state.attending &&
     <button className="btn waves-effect waves-light attendButton" onClick={this.attend}>Attend Event</button>
     }
     {this.state.attending &&
     <button className="btn waves-effect waves-light attendingButton" onClick={this.attend}>Attending</button>
     }
+    {this.state.isOwner &&
+      <a class="waves-effect waves-light btn modal-trigger attendButton" href="#editEventModal">Edit Event</a>
+    }
+   {this.state.isOwner &&
+       <a className="btn waves-effect waves-light modal-trigger attendButton" href='#deleteEventModal'>Cancel Event</a>
+      }
+    </div>
+      <EditEvent updateLocation={this.renderLocation} updateUser={this.getEventDetails} user={this.props.user} eventdetails={this.state.eventdetails}/>
+      <DeleteEvent redirect={this.redirect} updateLocation={this.renderLocation} updateUser={this.getEventDetails} user={this.props.user} eventdetails={this.state.eventdetails}/>
     </div>
     </div>
     <div className='row'>
@@ -185,20 +225,27 @@ clickedInfo = () => {
     </div>
     </div>
     <h4>Location Details</h4>
-    <Details getUser={this.props.getUser} user={this.props.user} ready={this.props.ready} placeDetailsId={this.state.eventdetails.location.placeId}/>
+    {/* {this.renderLocation()} */}
     </div>
     )
   }
-  getEventDetails = () => {
-    if(!this.state.stopReload){
+  getEventDetails = (bypass) => {
+    if(!this.state.stopReload || bypass !== undefined){
+    if(bypass){
+      this.setState({updateLocation: true})
+    }
     this.props.getUser();
     if(this.props.user){
     axios.post(`${process.env.REACT_APP_BASE}/events/getSingleEvent/${this.props.match.params.id}`,{user_id: this.props.user._id},{withCredentials: true})
     .then((response)=>{
       console.log('------------',response)
       if(response.data.attending === true){
-      this.setState({eventdetails: response.data.event, stopReload: true, attending: true})
+        if(response.data.event.owner._id === this.props.user._id){
+      this.setState({eventdetails: response.data.event, stopReload: true, attending: true, isOwner: true})
       }else{
+        this.setState({eventdetails: response.data.event, stopReload: true, attending: true})
+      }
+    }else{
         this.setState({eventdetails: response.data.event, stopReload: true})
       }
     })
@@ -218,6 +265,9 @@ clickedInfo = () => {
             {this.getEventDetails()}
             {this.state.eventdetails && 
             this.showEventDetails()
+            }
+            {this.state.eventdetails && 
+           <Details getUser={this.props.getUser} user={this.props.user} ready={this.props.ready} placeDetailsId={this.state.eventdetails.location.placeId}/>
             }
           </div>
         </div>

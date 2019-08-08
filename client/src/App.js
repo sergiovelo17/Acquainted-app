@@ -12,6 +12,7 @@ import Dashboard from './Components/dashboard/dashboard';
 import Details from './Components/details/details.js';
 import EventDetails from './Components/eventdetails/eventdetails';
 import Profile from './Components/profile/profile'
+import OtherProfile from './Components/profile-other-user/otherUserProfile'
 class App extends Component {
   state = {
     userLoggedIn: null,
@@ -69,6 +70,12 @@ class App extends Component {
            ready={this.state.ready}
            />} />
       <Route exact path="/dashboard" render ={(props)=> <Dashboard
+           {...props} 
+           getUser={this.getCurrentlyLoggedInUser}
+           user = {this.state.userLoggedIn}
+           ready={this.state.ready}
+           />} />
+      <Route exact path="/userProfile/:id" render ={(props)=> <OtherProfile
            {...props} 
            getUser={this.getCurrentlyLoggedInUser}
            user = {this.state.userLoggedIn}

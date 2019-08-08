@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const Events = require("../models/events")
 const axios = require('axios')
 const passport = require("passport");
+const cloudinary = require('../configs/cloudinary')
 
 router.post("/signup", async (req, res, next) => {
   console.log("calling signup route", req.body);
@@ -142,18 +143,19 @@ router.get('/currentUser', async (req,res,next)=>{
   }
 })
 
-router.post('/editProfile', async (req,res,next)=>{
+router.post('/editProfile', cloudinary.single('userImg'), async (req,res,next)=>{
   try{
-    const user = await User.findById(req.user._id) 
-    const userToUpdate = await User.findByIdAndUpdate(req.user._id,{
+   const user = await User.findById(req.user._id) 
+   console.log(req.file.url )   
+    await User.findByIdAndUpdate(req.user._id, {
       name: req.body.name,
       username: req.user.username,
       email: req.user.email,
       acquaintedCity: req.body.city,
       isAcquaintance: req.body.isAcquaintance,
-      profileDescription: req.body.profileDescription
-    })
-    console.log(userToUpdate);
+      profileDescription: req.body.description,
+      profileImg: req.file.url
+    });
     const updatedUser = await User.findById(req.user._id).populate('upcomingEvents').populate('pastEvents').populate('hostedEvents').populate('favoritePlaces')
     if(user.acquaintedCity !== req.body.city){
       console.log('city changed')
@@ -169,7 +171,7 @@ router.post('/editProfile', async (req,res,next)=>{
 router.post('/latlng', async (req,res,next)=>{
 try{
 const geoResult = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${req.user.acquaintedCity}&key=${process.env.GEOCODE}`);
-console.log(geoResult)
+// console.log(geoResult)
 const longitude = geoResult.data.results[0].geometry.lng;
 const latitude = geoResult.data.results[0].geometry.lat;
 res.json({lat: latitude, lng: longitude})
@@ -181,6 +183,7 @@ res.json({lat: latitude, lng: longitude})
 router.get('/otherUser/:id', async (req,res,next)=>{
   try{
       const user = await User.findById(req.params.id).populate('favoritePlaces').populate('upcomingEvents').populate('pastEvents').populate({ path: 'upcomingEvents', populate: { path: 'location' } });;
+      console.log(user);
       res.json(user); 
   }catch(err){
     res.json(err);

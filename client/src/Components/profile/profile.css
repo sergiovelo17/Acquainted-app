@@ -1,8 +1,7 @@
 .profile-header{
   margin-top: 30px;
   display: flex;
-  align-content: center;
-  justify-content: center;
+  flex-direction: column;
 }
 .image-and-info{
   display: flex;
@@ -14,7 +13,16 @@
 .user-info-under-name{
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-content: center;
   margin-left: 10%;
+}
+.profile-top{
+  margin-left: 40px !important;
+  margin-right: 40px !important;
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
 .profile-img{
 
@@ -37,6 +45,10 @@ box-shadow: 0px 5px 5px 5px rgba(162, 162, 162, 0.262);
   height: 60px;
   align-self: center;
 }
+.profile-column{
+  display: flex;
+  flex-direction: column;
+}
 .editButton{
   align-self: center;
   margin-left: 10%;
@@ -55,7 +67,12 @@ box-shadow: 0px 5px 5px 5px rgba(162, 162, 162, 0.262);
 .buttons{
   display: flex;
   align-self: center;
+  margin-top: 15%;
   justify-content: center;
+  width: 100%;
+}
+.buttons *{
+  margin-right: 5%;
 }
 .user-info-profile-header{
   margin-right: 0px !important;
@@ -66,4 +83,19 @@ box-shadow: 0px 5px 5px 5px rgba(162, 162, 162, 0.262);
 }
 .image-info-map{
   display: flex;
+}
+@media only screen and (max-width: 1000px) {
+  .profile-top {
+    margin-left: 40px !important;
+    margin-right: 40px !important;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+  }
+  .image-and-info{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }
 }

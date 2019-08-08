@@ -28,7 +28,7 @@ router.post('/createEvent', async (req,res,next)=>{
         await newEvent.save();
         await newChat.save();
         await User.findByIdAndUpdate(req.user._id,{$push: {hostedEvents: newEvent._id, upcomingEvents: newEvent._id}})
-        const me = await User.findById(req.user._id).populate('upcomingEvents').populate('pastEvents').populate('hostedEvents').populate('favoritePlaces')
+        const me = await User.findById(req.user._id).populate('upcomingEvents').populate('pastEvents').populate('hostedEvents').populate('favoritePlaces').populate({path: 'upcomingEvents', populate: {path: 'location'}})
         res.json({updated: me})
       }else{
         res.json({message: "You must be registered as an Acquaintance to use this feature"})
@@ -40,6 +40,30 @@ router.post('/createEvent', async (req,res,next)=>{
     }
   }catch(err){
     res.json(err);
+  }
+})
+router.post('/deleteEvent/:id',async (req,res,next)=>{
+  try{
+    const event = await Events.findByIdAndDelete(req.params.id)
+    res.json({message: 'deleted'})
+  }catch(err){
+    res.json(err);
+  }
+})
+router.post('/editEvent/:id',async (req,res,next)=>{
+  try{
+    const place = await Places.findOne({name: req.body.location})
+    const event = await Events.findByIdAndUpdate(req.params.id,{
+      title: req.body.title,
+      description: req.body.description,
+      time: req.body.time,
+      location: place
+    })
+    const updatedEvent = await Events.findById(req.params.id).populate('location').populate('owner').populate('attendees').populate('discussion').populate({ path: 'discussion', populate: { path: 'participants' } }).populate({path: 'discussion', populate: {path: 'messages'}}).populate({path: 'discussion', populate: {path: 'messages', populate: {path: 'createdBy'}}})
+    console.log(updatedEvent)
+    res.json(updatedEvent)
+  }catch(err){
+    res.json(err)
   }
 })
 

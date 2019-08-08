@@ -12,6 +12,7 @@ class AuthServices {
 
   login = (username, password) =>{
     console.log('<<<<<<<<<<<<<reached here>>>>>>>>>>>>>>>')
+    console.log(process.env.REACT_APP_AUTH_SERVICE_BASE_URL)
     return this.service.post('/login', {username, password})
     .then(response => response.data)
   }

@@ -17,7 +17,7 @@ require('./configs/passport');
 
 mongoose.Promise = Promise;
 mongoose
-  .connect(process.env/MONGODB_URI, {useNewUrlParser: true, useFindAndModify:false})
+  .connect(process.env.MONGODB_URI, {useNewUrlParser: true, useFindAndModify:false})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -33,8 +33,8 @@ const app = express();
 
 // Middleware Setup
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
 // Express View engine setup
@@ -69,9 +69,6 @@ app.use(cors({
   origin: ['http://localhost:3000', 'https://acquainted-app.herokuapp.com']
 }));
 
-app.use((req,res,next)=>{
-  res.sendFile(_dirname + "/public/index.html")
-})
 
 const index = require('./routes/index');
 app.use('/', index);
@@ -84,4 +81,7 @@ app.use('/api/events',eventsRoutes)
 const placesRoutes = require('./routes/placesRoutes');
 app.use('/api/places', placesRoutes);
 
+app.use((req,res,next)=>{
+  res.sendFile(_dirname + "/public/index.html")
+})
 module.exports = app;

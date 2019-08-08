@@ -17,6 +17,11 @@ class Dashboard extends Component {
     componentDidMount = () => {
       let tabs = document.querySelectorAll(".tabs");
       let instance = M.Tabs.init(tabs, {});
+      let photoBackgroundArr = ['/images/city-3.jpg','/images/city-header1.jpg','/images/city-header2.jpeg','/images/city-temp.jpg','/images/cityheader3.jpeg','/images/image-use.jpg'];
+      let randomNum = Math.floor(Math.random() * photoBackgroundArr.length);
+      let value = photoBackgroundArr[randomNum]
+      document.getElementById('dashboard-header').style.backgroundImage = `url(${value})`
+
     }
     componentDidUpdate = () => {
         let tabs = document.querySelectorAll(".tabs");
@@ -58,21 +63,30 @@ class Dashboard extends Component {
         </ul> 
         )
     }
-  render() {
-    if(this.props.ready)
+  render() {  
     return (
-      <div className="container">
-      <div className="row">
-      <div className="dashboard-header">
-          <h1>{this.props.user.acquaintedCity}</h1>
-        </div>
+    <div>
+      <div className="row" id="dashboard-header">
+      </div>
+      <div className='border'></div>
+        {this.props.ready &&
+      <div>
+      <div id='cityname-dahsboard'><h3 id='cityname-text'>{this.props.user.acquaintedCity}</h3></div>
+      <div className="container content-of-dashboard">
+      <div className='row'>
+        <div>
         {this.renderButtons()}
         {this.checker()}
+        </div>
+        </div>
       </div>
+      </div>
+        }
+        {!this.props.ready &&
+        <h1>Loading</h1>
+        }
     </div>
     )
-    else
-    return <h1>Loading</h1>
   }
 }
 

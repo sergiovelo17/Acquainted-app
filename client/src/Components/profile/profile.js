@@ -193,9 +193,7 @@ class Profile extends Component {
   };
   getProfileInfo = (bypass) => {
     if (!this.state.stopReload) {
-      console.log(bypass)
       this.props.getUser();
-      console.log(this.state.userForProfile);
       if (this.props.user !== null) {
         if (this.props.user.isAcquaintance === true) {
           this.setState({
@@ -235,12 +233,11 @@ class Profile extends Component {
     }
   };
   showInfo = () => {
-    console.log(this.state.userForProfile);
     return (
       <div>
         <div className="container-fluid">
-          <div className="row profile-header">
-            <div className="all-profile-info">
+          <div className="profile-header">
+            <div className="row all-profile-info">
               {!this.state.acquaintance && (
                 <h1>{this.state.userForProfile.name}</h1>
                 )}
@@ -253,7 +250,11 @@ class Profile extends Component {
                   />
                 </div>
               )}
-              <div className="image-info-map">
+              </div>
+              <div className='container-fluid'>
+              <div className='row profile-top'>
+              <div className='profile-column'>
+              <div className="image-info-map valign-center">
                 <img
                   className="profile-img"
                   src={this.state.userForProfile.profileImg}
@@ -266,10 +267,6 @@ class Profile extends Component {
                   </h5>
                 </div>
               </div>
-              {/* <GoogleMap user={this.props.user} lat={this.state.lat} lng={this.state.lng}/> */}
-            </div>
-          </div>
-          <div className="row">
             <div className="buttons">
             <a class="waves-effect waves-light btn modal-trigger editButton" href="#editPorfileModal1">Edit Profile</a>
               <br />
@@ -279,6 +276,14 @@ class Profile extends Component {
               )}
               <CreateEvent getUser={this.props.getUser} updateUser={this.getProfileInfo} user={this.props.user}/>
             </div>
+              </div>
+              <div className='col s12 m12 l7'>
+              <GoogleMap user={this.props.user} lat={this.state.lat} lng={this.state.lng}/>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
           </div>
           </div>
           <div className='container'>
