@@ -69,7 +69,7 @@ router.post('/editEvent/:id',async (req,res,next)=>{
 
 router.post('/getSingleEvent/:id', async (req,res,next)=>{
   try{
-    let event = await Events.findById(req.params.id).populate('location').populate('owner').populate('attendees').populate('discussion').populate({ path: 'discussion', populate: { path: 'participants' } })
+    let event = await Events.findById(req.params.id).populate('location').populate('owner').populate('attendees').populate('discussion').populate({ path: 'discussion', populate: { path: 'participants' } }).populate({path: 'discussion', populate: {path: 'messages'}}).populate({path: 'discussion', populate: {path: 'messages', populate: {path: 'createdBy'}}})
     if(event.discussion.messages.length > 0){
       event = await Events.findById(req.params.id).populate('location').populate('owner').populate('attendees').populate('discussion').populate({ path: 'discussion', populate: { path: 'participants' } }).populate({path: 'discussion', populate: {path: 'messages'}}).populate({path: 'discussion', populate: {path: 'messages', populate: {path: 'createdBy'}}})
     }
@@ -120,13 +120,14 @@ router.post('/attendEvent',async (req,res,next)=>{
   try{  
     // console.log(req.body)
     // console.log(req.user)
+    console.log('test')
     if(req.body.attending){
-      const event = await Events.findByIdAndUpdate(req.body.eventId,{$pull: {attendees: req.user._id}}, {new: true}).populate('owner').populate('attendees').populate('location')
+      const event = await Events.findByIdAndUpdate(req.body.eventId,{$pull: {attendees: req.user._id}}).populate('location').populate('owner').populate('attendees').populate('discussion').populate({ path: 'discussion', populate: { path: 'participants' } }).populate({path: 'discussion', populate: {path: 'messages'}}).populate({path: 'discussion', populate: {path: 'messages', populate: {path: 'createdBy'}}})
       const user = await User.findByIdAndUpdate(req.user._id,{$pull: {upcomingEvents: req.body.eventId}})
     //  console.log(event);
       res.json(event)
     }else{
-      const event = await Events.findByIdAndUpdate(req.body.eventId,{$push: {attendees: req.user._id}}, {new: true}).populate('owner').populate('attendees').populate('location')
+      const event = await Events.findByIdAndUpdate(req.body.eventId,{$push: {attendees: req.user._id}}, {new: true}).populate('location').populate('owner').populate('attendees').populate('discussion').populate({ path: 'discussion', populate: { path: 'participants' } }).populate({path: 'discussion', populate: {path: 'messages'}}).populate({path: 'discussion', populate: {path: 'messages', populate: {path: 'createdBy'}}})
       const user = await User.findByIdAndUpdate(req.user._id,{$push: {upcomingEvents: req.body.eventId}})
       res.json(event)
     }
@@ -147,7 +148,7 @@ router.post('/postToForum/:id', async (req,res,next)=>{
     if(!discussion.participants.includes(req.user._id)){
       const updateParticipants =  await Chat.findByIdAndUpdate(idOfDiscussion,{$push: {participants: req.user._id}})
     }
-    const event = await Events.findById(req.params.id).populate('location').populate('owner').populate('attendees').populate('discussion') .populate({ path: 'discussion', populate: { path: 'participants' } }).populate({path: 'discussion', populate: {path: 'messages'}}) .populate({path: 'discussion', populate: {path: 'messages', populate: {path: 'createdBy'}}})
+    const event = await Events.findById(req.params.id).populate('location').populate('owner').populate('attendees').populate('discussion').populate({ path: 'discussion', populate: { path: 'participants' } }).populate({path: 'discussion', populate: {path: 'messages'}}) .populate({path: 'discussion', populate: {path: 'messages', populate: {path: 'createdBy'}}})
     res.json(event)
   }catch(err){
     res.json(err)
