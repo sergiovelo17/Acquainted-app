@@ -21,6 +21,13 @@
   padding: 10px 20px;
 
 }
+.card img{
+  height: 230px !important;
+}
+div.aboutus-cards{
+  height: 400px !important;
+  max-height: 400px !important;
+}
 #header-content *{
   margin-top: 0;
   color: #555B6E;

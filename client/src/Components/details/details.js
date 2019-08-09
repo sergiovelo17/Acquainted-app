@@ -10,7 +10,8 @@ class Details extends Component {
   state = {
     details: null,
     stopReload: false,
-    favorited: false
+    favorited: false,
+    updated: false
   };
   service = new AuthService();
   componentDidMount(){
@@ -22,7 +23,7 @@ class Details extends Component {
 
   getDetails = () => {
     console.log('hi')
-    if (!this.state.stopReload) {
+    if (!this.state.stopReload || this.props.readyToUpdate) {
       if (this.props.match) {
         let id = this.props.match.params.id;
         this.props.getUser();
@@ -37,7 +38,7 @@ class Details extends Component {
               this.setState({
                 details: response.data.place,
                 favorited: response.data.isFavorited,
-                stopReload: true
+                stopReload: true,
               });
             })
             .catch(err => {
@@ -52,7 +53,7 @@ class Details extends Component {
         if (this.props.user) {
           axios
             .post(
-              `http://localhost:5000/api/places/placeDetails/${id}`,
+              `${process.env.REACT_APP_BASE}/places/placeDetails/${id}`,
               { user_id: this.props.user._id },
               { withCredentials: true }
             )
@@ -60,7 +61,8 @@ class Details extends Component {
               this.setState({
                 details: response.data.place,
                 favorited: response.data.isFavorited,
-                stopReload: true
+                stopReload: true,
+                updated: true
               });
             })
             .catch(err => {

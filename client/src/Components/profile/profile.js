@@ -23,6 +23,8 @@ class Profile extends Component {
     name: "",
     lat: null,
     lng: null,
+    loaded: false,
+    loading: false
   };
   service = new AuthService();
   componentDidMount = () => {
@@ -38,7 +40,14 @@ class Profile extends Component {
     var elems = document.querySelectorAll(".modal");
     var modalInstances = M.Modal.init(elems, {});
   };
-
+  showGif =() =>{
+    return(
+      <div>
+    <div id='profile-loader'><img width='400px' src='/images/preloader.gif'></img>
+    </div>
+    </div>
+    )
+  }
   getLatLng = () =>{
     axios.post(`${process.env.REACT_APP_BASE}/user/latlng`,{},{withCredentials:true})
     .then((response)=>{
@@ -51,7 +60,8 @@ class Profile extends Component {
       this.setState({
         favorites: true,
         upcomingEvents: false,
-        pastEvents: false
+        pastEvents: false,
+        loading: true
       });
     } else if (
       e.target.name === "upcomingEvents" &&
@@ -60,7 +70,8 @@ class Profile extends Component {
       this.setState({
         favorites: false,
         upcomingEvents: true,
-        pastEvents: false
+        pastEvents: false,
+        loading: true
       });
     } else if (
       e.target.name === "pastEvents" &&
@@ -69,10 +80,12 @@ class Profile extends Component {
       this.setState({
         favorites: false,
         upcomingEvents: false,
-        pastEvents: true
+        pastEvents: true,
+        loading: true
       });
     }
-  };
+    this.setIntervalForMap()
+   };
   displayInfo = () => {
     if (this.state.favorites) {
       if (!this.state.userForProfile.favoritePlaces.length > 0) {
@@ -232,6 +245,17 @@ class Profile extends Component {
     }
     }
   };
+  setIntervalForMap =()=>{
+    setTimeout(()=>{
+      this.setState({ loading: false})
+    },500)
+  }
+  setIntervalForLoader = () => {
+    setTimeout(()=>{
+      this.setState({loaded: true, loading: false})
+    },1000)
+    
+  }
   showInfo = () => {
     return (
       <div>
@@ -278,7 +302,12 @@ class Profile extends Component {
             </div>
               </div>
               <div className='col s12 m12 l7'>
-              <GoogleMap user={this.props.user} lat={this.state.lat} lng={this.state.lng}/>
+              {!this.state.loading &&
+              <GoogleMap user={this.state.userForProfile} lat={this.state.lat} lng={this.state.lng}/>
+              }
+              {this.state.loading &&
+              this.showGif()
+              }
               </div>
               </div>
             </div>
@@ -300,7 +329,16 @@ class Profile extends Component {
       return (
         <div>
           {this.getProfileInfo()}
-          {this.state.userForProfile && this.state.lat && this.showInfo()}
+          {!this.state.loaded && this.setIntervalForLoader()}
+          {!this.state.loaded &&
+            <div id='temp-div'>
+           { this.showGif()}
+
+              </div>
+          }
+          {this.state.userForProfile && this.state.lat && this.state.loaded && this.showInfo()}
+         
+        
         </div>
       );
     } else return <h1>Loading</h1>;

@@ -7,7 +7,6 @@ import axios from "axios";
 import '../details/details.css';
 import './eventdetails.css'
 import Moment from 'react-moment';
-import momentJS from 'moment'
 import M from 'materialize-css';
 import EditEvent from '../editEvent/editEvent'
 import DeleteEvent from '../deleteevent/deleteevent'
@@ -22,7 +21,7 @@ class EventDetails extends Component {
     discussion: false,
     message: '',
     isOwner: false,
-    updatedLocation: false
+    updatedLocation: false,
   }
   service = new AuthService();
   
@@ -90,23 +89,30 @@ showMessages = () => {
   return this.state.eventdetails.discussion.messages.map((eachMessage)=>{
     if(eachMessage.createdBy._id === this.props.user._id){
     return(
-      <div className='right-align'>
-      <i><p className='user-message-name'>Me</p></i>
-      <div className='user-chat-container'>
-      <div className='user-message'>
-      <div className='content-message-container'>
-       <p className='user-message-content'>{eachMessage.body}</p>
-       </div>
-       </div>
-       </div>
-       {momentJS(eachMessage.createdAt).fromNow()}
+      <div className='chat-container'>
+      <div className='chat-info-reverse'>
+      <i><p className='user-message-name'>By: {eachMessage.createdBy.username}</p></i>
+      <Moment format="MM/DD/YYYY">{eachMessage.createdAt}</Moment>
+      </div>
+      <div className='chat-content-reverse'>
+      <img className='chat-image' src={eachMessage.createdBy.profileImg}></img>
+      <p className='other-user-message-content'>{eachMessage.body}</p>
+      </div>
        {/* <Moment fromNow>{eachMessage.createdAt}</Moment> */}
       </div>
     )
     }else{
       return(
-      <div className='left-align'>
-      <i><p className='user-message-name'>{eachMessage.createdBy.username}</p></i>
+      <div className='chat-container'>
+      <div className='chat-info valign-center'>
+      <i><p className='user-message-name'>By: {eachMessage.createdBy.username}</p></i>
+      <Moment format="MM/DD/YYYY">{eachMessage.createdAt}</Moment>
+      </div>
+      <div className='chat-content'>
+      <img className='chat-image' src={eachMessage.createdBy.profileImg}></img>
+      <p className='other-user-message-content'>{eachMessage.body}</p>
+      </div>
+      {/* <i><p className='user-message-name'>{eachMessage.createdBy.username}</p></i>
       <div className='chat-container'>
       <div className='other-user-message'>
       <div className='content-message-container'>
@@ -114,7 +120,7 @@ showMessages = () => {
        </div>
        </div>
        </div>
-       <Moment fromNow>{eachMessage.createdAt}</Moment>
+       <Moment format="MM/DD/YYYY">{eachMessage.createdAt}</Moment> */}
       </div>
       )
     }
@@ -232,7 +238,7 @@ renderLocation = (bypass) => {
   getEventDetails = (bypass) => {
     if(!this.state.stopReload || bypass !== undefined){
     if(bypass){
-      this.setState({updateLocation: true})
+      this.setState({updatedLocation: true})
     }
     this.props.getUser();
     if(this.props.user){
@@ -266,7 +272,10 @@ renderLocation = (bypass) => {
             {this.state.eventdetails && 
             this.showEventDetails()
             }
-            {this.state.eventdetails && 
+            {/* {this.state.eventdetails && this.state.updatedLocation &&
+           <Details getUser={this.props.getUser} readyToUpdate={true} user={this.props.user} ready={this.props.ready} placeDetailsId={this.state.eventdetails.location.placeId}/>
+            } */}
+            {this.state.eventdetails &&
            <Details getUser={this.props.getUser} user={this.props.user} ready={this.props.ready} placeDetailsId={this.state.eventdetails.location.placeId}/>
             }
           </div>

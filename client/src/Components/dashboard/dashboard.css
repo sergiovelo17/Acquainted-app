@@ -31,6 +31,19 @@ margin-top: 40px;
   position: absolute;
   border-bottom: 2px solid #555B6E;
 }
+.results-search{
+  box-shadow: 0px 5px 10px 8px rgba(162, 162, 162, 0.262);
+  margin-bottom: 20px;
+  margin-top: -20px;
+}
+.search-bar:focus {
+    border-bottom: 1px solid #87BCDE !important;
+    box-shadow: 0 1px 0 0 #87BCDE !important
+
+}
+.eachResult{
+  padding: 5px;
+}
 #cityname-dahsboard{
   background-color: rgba(255, 255, 255, 0.516);
   position: absolute;

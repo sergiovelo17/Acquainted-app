@@ -23,6 +23,9 @@ input[type=text]:focus {
 .switch label input[type=checkbox]:checked+.lever{
   background-color: #87BCDE !important;
 }
+#loading-events{
+  height: 600px;
+}
 
 *{
   color: #555B6E

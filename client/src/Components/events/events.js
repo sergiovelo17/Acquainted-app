@@ -69,10 +69,11 @@ class Events extends Component {
           <div id="events-for-user"className="row">
             {this.getEvents()}
             {this.state.events && this.showEvents()}
+            {!this.state.events && <div id='loading-events'><img width='400px' src='/images/preloader.gif'></img></div>}
           </div>
         </div>
       );
-    else return <h1>Loading</h1>;
+    else return <div id='loading-events'>Loading</div>;
   }
 }
 

@@ -182,4 +182,20 @@ router.get('/nextpage/:token', async(req,res,next)=>{
     res.json(err)
   }
 })
+router.post('/query',async(req,res,next)=>{
+  try{
+    console.log(req.body.user);
+    console.log('----------------------')
+    console.log(req.body.input);
+    const sessionToken = req.body.user._id;
+    const geoResult = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${req.body.user.acquaintedCity}&key=${process.env.GEOCODE}`);
+    const longitude = geoResult.data.results[0].geometry.lng;
+    const latitude = geoResult.data.results[0].geometry.lat;
+    const response = await axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.body.input}&key=${process.env.GOOGLEAPI}&location=${latitude},${longitude}&radius=1200&sessiontoken=${sessionToken}`)
+    res.json(response.data)
+
+  }catch(err){
+    res.json(err);
+  }
+})
 module.exports = router;

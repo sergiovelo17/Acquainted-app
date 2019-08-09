@@ -144,9 +144,16 @@ router.get('/currentUser', async (req,res,next)=>{
 })
 
 router.post('/editProfile', cloudinary.single('userImg'), async (req,res,next)=>{
+ console.log('>>>>>>>>>>>>>>>>>',req.user._id)
   try{
    const user = await User.findById(req.user._id) 
-   console.log(req.file.url )   
+  //  console.log(user)
+   console.log('------------------------------')
+   console.log(req.body.userImg) 
+   if(req.file){
+     console.log(req.file.url)
+   }
+   if(req.file){
     await User.findByIdAndUpdate(req.user._id, {
       name: req.body.name,
       username: req.user.username,
@@ -156,6 +163,17 @@ router.post('/editProfile', cloudinary.single('userImg'), async (req,res,next)=>
       profileDescription: req.body.description,
       profileImg: req.file.url
     });
+  }else{
+    console.log('here')
+    await User.findByIdAndUpdate(req.user._id, {
+      name: req.body.name,
+      username: req.user.username,
+      email: req.user.email,
+      acquaintedCity: req.body.city,
+      isAcquaintance: req.body.isAcquaintance,
+      profileDescription: req.body.description,
+    });
+  }
     const updatedUser = await User.findById(req.user._id).populate('upcomingEvents').populate('pastEvents').populate('hostedEvents').populate('favoritePlaces')
     if(user.acquaintedCity !== req.body.city){
       console.log('city changed')

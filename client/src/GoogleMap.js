@@ -1,4 +1,7 @@
 import React from "react";
+import './map.css'
+import { Route, Link, Switch } from "react-router-dom";
+
 class MyMap extends React.Component {
 
   render() {
@@ -16,7 +19,7 @@ class MyMap extends React.Component {
         googleMapURL: `https://maps.googleapis.com/maps/api/js?key=AIzaSyBht5Low4uRnWs5MUcGoBnE3nvcG31AxUU&v=3.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{ height: `100%` }} />,
         containerElement: <div style={{ height: `400px` }} />,
-        mapElement: <div style={{ height: `100%` }} />
+        mapElement: <div className='map' style={{ height: `100%` }} />
       }),withStateHandlers(() => ({
         isOpen: false,
         infoIndex: -1,
@@ -55,7 +58,8 @@ class MyMap extends React.Component {
           <InfoWindow onCloseClick={props.onToggleOpen} id={location._id} visible={true}>
                 <div>
                   <h5>Favorited Location</h5>
-                  <h6>Name: {location.name}</h6>
+                  <Link exact to={`/details/${location.placeId}`}><h6>{location.name}</h6></Link>
+                  <img width='50%' src={location.photos[0]}></img>
                 </div>
             </InfoWindow>
           }
@@ -71,13 +75,14 @@ class MyMap extends React.Component {
               name={event.location.name}
               position={{ lat: event.location.lat, lng: event.location.lng }}
               onClick={(e)=>props.onToggleOpen(e, index, event.location.name)}            >
-            >
+            
             { props.isOpen && props.infoIndex === index && props.name == event.location.name &&
               <InfoWindow onCloseClick={props.onToggleOpen} id={index} visible={true}>
                     <div>
                       <h5>Event Scheduled</h5>
                       <h6>{event.title}</h6>
-                      <h6>At: {event.location.name}</h6>
+                      <Link exact to={`/details/${event.location.placeId}`}><h6>{event.location.name}</h6></Link>
+                        <img width='50%' src={event.location.photos[0]}></img>
                     </div>
                 </InfoWindow>
               }

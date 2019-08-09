@@ -49,6 +49,7 @@ class EditEvent extends Component {
         { withCredentials: true }
       )
       .then(response => {
+        console.log(response);
         this.props.updateUser(response);
       });
   };
@@ -59,7 +60,7 @@ class EditEvent extends Component {
         <div id="editEventModal" class="modal">
         <div class="modal-content">
             <h4>Create Event</h4>
-            <form onSubmit={this.submitEditForm}>
+            <form id='edit-event-form' onSubmit={this.submitEditForm}>
               <legend>Title</legend>
               <input type="text" onChange={this.handleChange} value={this.state.title} name="title"/>
               <legend>Location</legend>

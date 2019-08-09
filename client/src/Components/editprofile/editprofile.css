@@ -3,3 +3,6 @@
   background-color: #FF934F;
   color: #555B6E;
 }
+.buttons *{
+  margin-right: auto !important;
+}

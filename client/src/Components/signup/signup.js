@@ -35,7 +35,9 @@ class Signup extends Component{
     return this.service.signup(username,password,name,email,city,isAcquaintance)
     .then((response)=>{
       this.props.getUser();
-      this.props.history.push('/')
+      setTimeout(()=>{
+        this.props.history.push('/dashboard')
+      },700)
     })
 
     }

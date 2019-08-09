@@ -32,6 +32,7 @@ class EditProfile extends Component {
     this.setState({ [e.target.name]: e.target.value})
   };
   handlePicture = (e) => {
+    console.log(e.target)
    this.setState({userImage: e.target.files[0]})
     // else {
     //   document.getElementById('edit-form-modal').submit();
@@ -47,7 +48,6 @@ class EditProfile extends Component {
     const isAcquaintance = this.state.isAcquaintance;
     const description = this.state.description;
     const userImg = this.state.userImage;
-
     let theRequest = new FormData();
     theRequest.append('username', username)
     theRequest.append('email', email)
@@ -56,7 +56,6 @@ class EditProfile extends Component {
     theRequest.append('isAcquaintance', isAcquaintance)
     theRequest.append('description', description)
     theRequest.append('userImg', this.state.userImage)
-
 
     axios
       .post(`${process.env.REACT_APP_BASE}/user/editProfile`, theRequest,

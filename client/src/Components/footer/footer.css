@@ -1,0 +1,25 @@
+.footer {
+  background-color: #555B6E;
+  color: #FF934F; 
+  margin-top: 150px !important;
+}
+.footer *{
+  color: #FF934F
+}
+#linked{
+  color: white;
+}
+
+.footer-row {
+  padding-top: 5% !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 5% !important; }
+
+.footer-list {
+  margin-top: 6%; }
+
+.footer-list li {
+  margin: 20px 0; }
+.underline{
+border-bottom: 1px solid #87BCDE;
+}

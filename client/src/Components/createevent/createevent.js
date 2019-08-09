@@ -66,7 +66,7 @@ class CreateEvent extends Component {
               <input onChange={this.handleChange} type="datetime-local" name="time" />
               <legend>Description</legend>
               <input onChange={this.handleChange} type="text" name="description" />
-              <button class="modal-close waves-effect submit-changes btn">
+              <button id='eventBtn' class="modal-close waves-effect submit-changes btn">
                 Submit
               </button>
             </form>

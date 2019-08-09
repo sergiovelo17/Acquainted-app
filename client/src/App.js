@@ -13,6 +13,7 @@ import Details from './Components/details/details.js';
 import EventDetails from './Components/eventdetails/eventdetails';
 import Profile from './Components/profile/profile'
 import OtherProfile from './Components/profile-other-user/otherUserProfile'
+import Footer from './Components/footer/footer'
 class App extends Component {
   state = {
     userLoggedIn: null,
@@ -100,6 +101,7 @@ class App extends Component {
            ready={this.state.ready}
            />} />
      </Switch>
+     <Footer/>
     </div>
   );
 }

@@ -11,7 +11,9 @@ class Dashboard extends Component {
   state = {
     places: true,
     events: false,
-    stopReload: false
+    stopReload: false,
+    searchResults:[],
+    currentSearch: ''
   }
     service = new AuthService();
     componentDidMount = () => {
@@ -27,7 +29,27 @@ class Dashboard extends Component {
         let tabs = document.querySelectorAll(".tabs");
         let instance = M.Tabs.init(tabs, {});
     }
-
+    showResults = () =>{
+      return this.state.searchResults.map((eachResult)=>{
+        return <Link exact to={`/details/${eachResult.place_id}`}><h6 className='eachResult'>{eachResult.description}</h6></Link>
+      })
+    }
+    search = (e) => {
+      if(this.props.user){
+      this.setState({currentSearch: e.target.value},()=>{
+        axios.post(`${process.env.REACT_APP_BASE}/places/query`,{
+          input: this.state.currentSearch,
+          user: this.props.user
+        })
+        .then((response)=>{
+          // console.log(response);
+          this.setState({searchResults: response.data.predictions})
+        })
+      });
+    }else{
+      this.props.history.push('/account/login')
+    }
+    }
     checker = (e) =>{
       console.log(this.state);
       // console.log(this.props.match.params.option)
@@ -74,6 +96,14 @@ class Dashboard extends Component {
       <div id='cityname-dahsboard'><h3 id='cityname-text'>{this.props.user.acquaintedCity}</h3></div>
       <div className="container content-of-dashboard">
       <div className='row'>
+        <div>
+          <input placeholder='Search for anything in your city' className='search-bar' onChange={this.search}/>
+          {this.state.currentSearch &&
+          <div className='left-align results-search'>
+          {this.showResults()}
+          </div>
+           }
+          </div>
         <div>
         {this.renderButtons()}
         {this.checker()}

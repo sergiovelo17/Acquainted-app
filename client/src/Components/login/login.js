@@ -21,7 +21,9 @@ class Login extends Component {
       this.service.login(username,password)
       .then((response)=>{
         this.props.getUser()
-        this.props.history.push('/')
+        setTimeout(()=>{
+          this.props.history.push('/dashboard')
+        },700)
       })
     }
 
