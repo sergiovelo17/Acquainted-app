@@ -120,7 +120,7 @@ router.post('/attendEvent',async (req,res,next)=>{
   try{  
     // console.log(req.body)
     // console.log(req.user)
-    console.log('test')
+    console.log('testing')
     if(req.body.attending){
       const event = await Events.findByIdAndUpdate(req.body.eventId,{$pull: {attendees: req.user._id}}).populate('location').populate('owner').populate('attendees').populate('discussion').populate({ path: 'discussion', populate: { path: 'participants' } }).populate({path: 'discussion', populate: {path: 'messages'}}).populate({path: 'discussion', populate: {path: 'messages', populate: {path: 'createdBy'}}})
       const user = await User.findByIdAndUpdate(req.user._id,{$pull: {upcomingEvents: req.body.eventId}})
