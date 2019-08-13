@@ -17,9 +17,7 @@ class Details extends Component {
   componentDidMount(){
     this.getDetails();
   }
-  componentDidUpdate(){
-    this.getDetails();
-  }
+  
 
   getDetails = () => {
     console.log('hi')
@@ -106,7 +104,7 @@ class Details extends Component {
     }
   };
   imageCarousel = () => {
-    if (this.state.details.photos) {
+    if (this.state.details.photos.length > 0) {
       console.log(this.state.details.photos)
       return (
         <Carousel>
@@ -133,6 +131,8 @@ class Details extends Component {
           </div>
         </Carousel>
       );
+    }else{
+      return <img width='300px' height='250px' src='/images/nophoto.png'/>
     }
   };
   addToFavorites = () => {
@@ -165,8 +165,14 @@ class Details extends Component {
           <h2>{this.state.details.name}</h2>
           <h5>{this.state.details.address}</h5>
           <h5>{this.state.details.phone}</h5>
+          {!this.state.details.hours &&
+          <h5>No available hours</h5>
+          }
+          {this.state.details.hours &&
           <h5>Hours: </h5>
+          }
           {this.showHours()}
+          {this.state.details.website &&
           <a
             href={this.state.details.website}
             rel="noopener noreferrer"
@@ -174,6 +180,7 @@ class Details extends Component {
           >
             Link to their website
           </a>
+          }
           <br />
           {!this.state.favorited && (
             <button
@@ -195,6 +202,7 @@ class Details extends Component {
         <div id="details-carousel" className="col s12 m6">
           {this.imageCarousel()}
         </div>
+        {this.state.details.reviews.legnth > 0 &&
         <div className="col s12">
           <h4>Reviews</h4>
           <p>
@@ -202,6 +210,7 @@ class Details extends Component {
             {this.state.details.price_level}/4
           </p>
         </div>
+          }
         <div id="place-reviews" className="col s12">
           {this.getReviews()}
         </div>
