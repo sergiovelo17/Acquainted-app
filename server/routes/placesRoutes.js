@@ -88,6 +88,7 @@ router.post('/placeDetails/:id', async (req,res,next)=>{
       let content = details.data.result;
       // console.log('+++++++++++++++',content)
       let photoArr = [];
+      if(content.photos){
       if(content.photos.length >= 3){
         for(let i = 0; i < 3; i++){
           let ref = content.photos[i].photo_reference;
@@ -105,6 +106,7 @@ router.post('/placeDetails/:id', async (req,res,next)=>{
         const onePhoto = await axios.get(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${ref}&key=${process.env.GOOGLEAPI}`)
         photoArr.push(onePhoto.request.res.responseUrl)
     }
+  }
 
       const lat = content.geometry.location.lat;
       const lng = content.geometry.location.lng;
@@ -122,16 +124,21 @@ router.post('/placeDetails/:id', async (req,res,next)=>{
       if(content.formatted_phone_number){
       phone= content.formatted_phone_number;
       }
-      const address= content.formatted_address;
+      let address = undefined;
+      if(content.formatted_address){
+      address= content.formatted_address;
+      }
       let website = undefined;
       if(content.website){
       website= content.website;
       }
       let hours= undefined;
-      if(content.opening_hours.weekday_text){
+      if(content.opening_hours){
+        if(content.opening_hours.weekday_text){
         hours = content.opening_hours.weekday_text;
+        }
       }
-      let reviews= undefined;
+      let reviews= [];
       if(content.reviews){
        reviews = [...content.reviews];
       }
@@ -142,7 +149,6 @@ router.post('/placeDetails/:id', async (req,res,next)=>{
         lat: lat,
         lng: lng,
         name: name,
-        icon: icon,
         photos: [...photoArr],
         price_level: price_level,
         rating: rating,
