@@ -109,14 +109,33 @@ router.post('/placeDetails/:id', async (req,res,next)=>{
       const lat = content.geometry.location.lat;
       const lng = content.geometry.location.lng;
       const name = content.name;
-      const icon = content.icon;
-      const price_level= content.price_level;
-      const rating= content.rating;
-      const phone = content.formatted_phone_number;
+      // const icon = content.icon;
+      let price_level = undefined;
+      if(content.price_level){
+      price_level= content.price_level;
+      }
+      let rating = undefined;
+      if(content.rating){
+      rating= content.rating;
+      }
+      let phone = undefined;
+      if(content.formatted_phone_number){
+      phone= content.formatted_phone_number;
+      }
       const address= content.formatted_address;
-      const website= content.website;
-      const hours= content.opening_hours.weekday_text;
-      const reviews= [...content.reviews];
+      let website = undefined;
+      if(content.website){
+      website= content.website;
+      }
+      let hours= undefined;
+      if(content.opening_hours.weekday_text){
+        hours = content.opening_hours.weekday_text;
+      }
+      let reviews= undefined;
+      if(content.reviews){
+       reviews = [...content.reviews];
+      }
+      console.log('test')
       const newPlace = await new Places({
         owner: req.user,
         placeId: req.params.id,
@@ -133,6 +152,7 @@ router.post('/placeDetails/:id', async (req,res,next)=>{
         hours: hours,
         reviews: [...reviews]
       });
+      console.log(newPlace);
       // console.log('reached here!!!!')
       const saved = await newPlace.save();
     
