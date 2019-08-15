@@ -51,7 +51,6 @@ class Dashboard extends Component {
     }
     }
     checker = (e) =>{
-      console.log(this.state);
       // console.log(this.props.match.params.option)
       if(this.state)
       if(!this.state.stopReload) {
