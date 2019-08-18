@@ -7,7 +7,7 @@ const Places = require('../models/places')
 
 router.get('/byCity/:radius?', async (req, res, next) => {
   try{
-  console.log('hi')
+  // console.log('hi')
   let geoResult = undefined;
   if(req.user){
   geoResult = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${req.user.acquaintedCity}&key=${process.env.GEOCODE}`);
@@ -15,14 +15,14 @@ router.get('/byCity/:radius?', async (req, res, next) => {
     res.json({message: "User must be signed in"})
     return;
   }
-  console.log(geoResult.data.results);
+  // console.log(geoResult.data.results);
   const longitude = geoResult.data.results[0].geometry.lng;
   const latitude = geoResult.data.results[0].geometry.lat;
   let radius = 2500;
-  console.log(latitude, longitude, radius)
+  // console.log(latitude, longitude, radius)
   if(req.params.radius){
     radius = req.params.radius;
-    console.log('radius sent --->',radius)
+    // console.log('radius sent --->',radius)
   }
     const restaurants = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=restaurant&key=${process.env.GOOGLEAPI}`);
     const lodging = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=lodging&key=${process.env.GOOGLEAPI}`);
@@ -142,7 +142,7 @@ router.post('/placeDetails/:id', async (req,res,next)=>{
       if(content.reviews){
        reviews = [...content.reviews];
       }
-      console.log('test')
+      // console.log('test')
       const newPlace = await new Places({
         owner: req.user,
         placeId: req.params.id,
@@ -158,7 +158,7 @@ router.post('/placeDetails/:id', async (req,res,next)=>{
         hours: hours,
         reviews: [...reviews]
       });
-      console.log(newPlace);
+      // console.log(newPlace);
       // console.log('reached here!!!!')
       const saved = await newPlace.save();
     
@@ -175,8 +175,8 @@ router.get('/getPhoto/:ref',async(req,res,next)=>{
   let ref = req.params.ref;
   const onePhoto = await axios.get(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${ref}&key=${process.env.GOOGLEAPI}`)
 
-  console.log('-------------')
-  console.log(onePhoto);
+  // console.log('-------------')
+  // console.log(onePhoto);
   res.json(onePhoto.config.url)
   }catch(err){
     res.json(err);
@@ -202,7 +202,7 @@ router.post('/addToFavoritePlaces/:id', async (req,res,next)=>{
 router.get('/nextpage/:token', async(req,res,next)=>{
   try{
     const result = await await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken=${req.params.token}&key=${process.env.GOOGLEAPI}`);
-    console.log(result);
+    // console.log(result);
     res.json({results: result.data.results, nextpage: result.data.next_page_token});
   }catch(err){
     res.json(err)
@@ -210,9 +210,9 @@ router.get('/nextpage/:token', async(req,res,next)=>{
 })
 router.post('/query',async(req,res,next)=>{
   try{
-    console.log(req.body.user);
-    console.log('----------------------')
-    console.log(req.body.input);
+    // console.log(req.body.user);
+    // console.log('----------------------')
+    // console.log(req.body.input);
     const sessionToken = req.body.user._id;
     const geoResult = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${req.body.user.acquaintedCity}&key=${process.env.GEOCODE}`);
     const longitude = geoResult.data.results[0].geometry.lng;
