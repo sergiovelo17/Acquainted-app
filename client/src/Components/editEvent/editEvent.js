@@ -32,7 +32,7 @@ class EditEvent extends Component {
     })
   }
   submitEditForm = e => {
-    console.log('hi')
+    // console.log('hi')
     e.preventDefault()
     const title = this.state.title;
     const description = this.state.description;
@@ -49,7 +49,7 @@ class EditEvent extends Component {
         { withCredentials: true }
       )
       .then(response => {
-        console.log(response);
+        // console.log(response);
         this.props.updateUser(response);
       });
   };

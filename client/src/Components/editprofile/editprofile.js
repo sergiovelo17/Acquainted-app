@@ -32,7 +32,7 @@ class EditProfile extends Component {
     this.setState({ [e.target.name]: e.target.value})
   };
   handlePicture = (e) => {
-    console.log(e.target)
+    // console.log(e.target)
    this.setState({userImage: e.target.files[0]})
     // else {
     //   document.getElementById('edit-form-modal').submit();
@@ -40,7 +40,7 @@ class EditProfile extends Component {
   }
   submitEditForm = e => {
     e.preventDefault()
-    console.log(this.state.userImage)
+    // console.log(this.state.userImage)
     const username = this.state.username;
     const email = this.state.email;
     const name = this.state.name;
@@ -62,7 +62,7 @@ class EditProfile extends Component {
         { withCredentials: true }
       )
       .then(response => {
-        console.log(response);
+        // console.log(response);
         this.props.updateUser(response)
       });
   };
