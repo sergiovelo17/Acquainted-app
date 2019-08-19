@@ -26,7 +26,9 @@ class Dashboard extends Component {
       let randomNum = Math.floor(Math.random() * photoBackgroundArr.length);
       let value = photoBackgroundArr[randomNum]
       document.getElementById('dashboard-header').style.backgroundImage = `url(${value})`
-
+      if(this.props.location.search){
+        this.getToken()
+        }
     }
     componentDidUpdate = () => {
         let tabs = document.querySelectorAll(".tabs");
@@ -37,11 +39,32 @@ class Dashboard extends Component {
         return <Link exact to={`/details/${eachResult.place_id}`}><h6 className='eachResult'>{eachResult.description}</h6></Link>
       })
     }
-    accessMeetup = () =>{
-      axios.post(`${process.env.REACT_APP_BASE}/user/meetup`,{},{
+    getToken = () =>{
+     console.log(this.props.location.search)
+     let param = this.props.location.search;
+     let token = param.substring(6);
+     console.log(token);
+     axios.post(`${process.env.REACT_APP_BASE}/user/meetup`,
+     {
+       code: token
+     },{withCredentials: true})
+     .then((response)=>{
+       console.log(response);
+       this.setState({meetuptoken: response.data.access_token, meetuprefresh: response.data.refresh_token},()=>{
+
+       })
+     })
+    }
+    getMeetupEvents = () =>{
+      axios.post(`${process.env.REACT_APP_BASE}/user/meetup/events`,{
+        token: this.state.meetuptoken
+      },{
         withCredentials: true
-      }).then((response)=>{
-        console.log(response)
+      })
+      .then((response)=>{
+        console.log('hi')
+        console.log(response.data.events);
+        let events = response.data.events
       })
     }
     search = (e) => {
@@ -80,8 +103,17 @@ class Dashboard extends Component {
       }else if(this.state.eventbrite){
         return(
           <div>
+          {!this.state.meetuptoken &&
+          <div>
        <h2>Use Meetup</h2>
        <a href={`https://secure.meetup.com/oauth2/authorize?client_id=r1j6mcrdj6o3dq435ma7kejrg3&response_type=code&redirect_uri=http://localhost:3000/dashboard`}>Link Account</a>
+        </div>
+        }
+        {this.state.meetuptoken &&
+        <div>
+          {this.getMeetupEvents()}
+        </div>
+        }
        </div>
         )
       }
@@ -112,7 +144,6 @@ class Dashboard extends Component {
       <div className='border'></div>
         {this.props.ready &&
       <div>
-        {/* {this.getToken()} */}
       <div id='cityname-dahsboard'><h3 id='cityname-text'>{this.props.user.acquaintedCity}</h3></div>
       <div className="container content-of-dashboard">
       <div className='row'>
