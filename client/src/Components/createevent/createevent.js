@@ -19,7 +19,6 @@ class CreateEvent extends Component {
     var instances = M.FormSelect.init(elems, {})
   };
   createEvent = e => {
-    console.log("hi");
     e.preventDefault();
     const time = this.state.time;
     const title = this.state.title;
@@ -37,7 +36,6 @@ class CreateEvent extends Component {
   };
   handleChange = (e) =>{
     this.setState({[e.target.name]: e.target.value})
-    console.log(this.state)
   }
   showLocationOptions = () => {
     return this.props.user.favoritePlaces.map((eachFavorite)=>{

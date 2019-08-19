@@ -14,7 +14,9 @@ class Dashboard extends Component {
     eventbrite: false,
     stopReload: false,
     searchResults:[],
-    currentSearch: ''
+    currentSearch: '',
+    meetuptoken: null,
+    meetuprefresh: null
   }
     service = new AuthService();
     componentDidMount = () => {
@@ -33,6 +35,13 @@ class Dashboard extends Component {
     showResults = () =>{
       return this.state.searchResults.map((eachResult)=>{
         return <Link exact to={`/details/${eachResult.place_id}`}><h6 className='eachResult'>{eachResult.description}</h6></Link>
+      })
+    }
+    accessMeetup = () =>{
+      axios.post(`${process.env.REACT_APP_BASE}/user/meetup`,{},{
+        withCredentials: true
+      }).then((response)=>{
+        console.log(response)
       })
     }
     search = (e) => {
@@ -70,7 +79,10 @@ class Dashboard extends Component {
         )
       }else if(this.state.eventbrite){
         return(
-       <h2>nothing here</h2>
+          <div>
+       <h2>Use Meetup</h2>
+       <a href={`https://secure.meetup.com/oauth2/authorize?client_id=r1j6mcrdj6o3dq435ma7kejrg3&response_type=code&redirect_uri=http://localhost:3000/dashboard`}>Link Account</a>
+       </div>
         )
       }
     } 
@@ -100,6 +112,7 @@ class Dashboard extends Component {
       <div className='border'></div>
         {this.props.ready &&
       <div>
+        {/* {this.getToken()} */}
       <div id='cityname-dahsboard'><h3 id='cityname-text'>{this.props.user.acquaintedCity}</h3></div>
       <div className="container content-of-dashboard">
       <div className='row'>

@@ -19,7 +19,7 @@ class DeleteEvent extends Component {
       { withCredentials: true }
     )
     .then(response => {
-      console.log(this.props)
+      // console.log(this.props)
       this.props.redirect()
     });  
   };

@@ -207,6 +207,16 @@ router.get('/otherUser/:id', async (req,res,next)=>{
     res.json(err);
   }
 })
+router.post('/meetup', async (req,res,next)=>{
+  try{
+    let response = await axios.post(`https://secure.meetup.com/oauth2/authorize
+    ?client_id=${process.env.MEETUPKEY}
+    &response_type=code
+    &redirect_uri=${process.env.MEETUPURI}`)
+  }catch(err){
+    res.json(err);
+  }
+})
 
 
 
