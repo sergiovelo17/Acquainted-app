@@ -112,7 +112,7 @@ class Dashboard extends Component {
           user: this.props.user
         })
         .then((response)=>{
-          console.log(response);
+          console.log(response,'done');
           this.setState({searchResults: response.data.predictions})
         })
       });
