@@ -16,7 +16,8 @@ class Dashboard extends Component {
     searchResults:[],
     currentSearch: '',
     meetuptoken: null,
-    meetuprefresh: null
+    meetuprefresh: null,
+    meetupEvents: null
   }
     service = new AuthService();
     componentDidMount = () => {
@@ -55,6 +56,41 @@ class Dashboard extends Component {
        })
      })
     }
+    showMeetup = () =>{
+      return this.state.meetupEvents.map((each)=>{
+        return (
+          <div class="col s12 m4">
+          <div class="card horizontal">
+            <div class="card-stacked">
+              <div class="card-content card-places">
+                <h4>{each.name}</h4>
+                {each.venue &&
+                <h6>At: {each.venue.name}</h6>
+                }
+                {each.group &&
+                <h6>By: {each.group.name}</h6>
+              }
+                <p>
+                  {each.description}
+                </p>
+                  <p>{each.local_date}</p>
+                 </div>
+              <div class="card-action center-align">
+                {/* <Link
+                  className="details-link"
+                  events={this.state.events}
+                  exact
+                  to={`/eventDetails/${eachEvent._id}`}
+                >
+                  Details
+                </Link> */}
+              </div>
+            </div>
+          </div>
+        </div>
+        )
+      })
+    }
     getMeetupEvents = () =>{
       axios.post(`${process.env.REACT_APP_BASE}/user/meetup/events`,{
         token: this.state.meetuptoken
@@ -64,7 +100,8 @@ class Dashboard extends Component {
       .then((response)=>{
         console.log('hi')
         console.log(response.data.events);
-        let events = response.data.events
+        let theEvents = response.data.events
+        this.setState({meetupEvents: theEvents});
       })
     }
     search = (e) => {
@@ -112,7 +149,10 @@ class Dashboard extends Component {
         {this.state.meetuptoken &&
         <div>
           {this.getMeetupEvents()}
-        </div>
+          {this.state.meetupEvents &&
+          this.showMeetup()
+          }
+          </div>
         }
        </div>
         )

@@ -211,11 +211,12 @@ router.post('/meetup', async (req,res,next)=>{
   try{
     console.log(req.body.code)
     console.log('here')
+    console.log(process.env.MEETUPKEY,process.env.MEETUPSECRET,process.env.MEETUPURI)
     let response = await axios.post(`https://secure.meetup.com/oauth2/access?client_id=${process.env.MEETUPKEY}&client_secret=${process.env.MEETUPSECRET}&grant_type=authorization_code&redirect_uri=${process.env.MEETUPURI}&code=${req.body.code}`)
     console.log(response.data,'>>>>>>>>>>>>>');
     res.json(response.data);
   }catch(err){
-    // console.log(err);
+    console.log(err);
     res.json({message: 'woah', facts: err.data});
   }
 })
