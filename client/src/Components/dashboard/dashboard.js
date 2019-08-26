@@ -17,7 +17,8 @@ class Dashboard extends Component {
     currentSearch: '',
     meetuptoken: null,
     meetuprefresh: null,
-    meetupEvents: null
+    meetupEvents: null,
+    loadedMeetup: false
   }
     service = new AuthService();
     componentDidMount = () => {
@@ -63,17 +64,14 @@ class Dashboard extends Component {
           <div class="card horizontal">
             <div class="card-stacked">
               <div class="card-content card-places">
-                <h4>{each.name}</h4>
+                <h5>{each.name}</h5>
                 {each.venue &&
                 <h6>At: {each.venue.name}</h6>
                 }
                 {each.group &&
                 <h6>By: {each.group.name}</h6>
               }
-                <p>
-                  {each.description}
-                </p>
-                  <p>{each.local_date}</p>
+                  <p>On: {each.local_date}</p>
                  </div>
               <div class="card-action center-align">
                 {/* <Link
@@ -92,6 +90,7 @@ class Dashboard extends Component {
       })
     }
     getMeetupEvents = () =>{
+      if(!this.state.loadedMeetup){
       axios.post(`${process.env.REACT_APP_BASE}/user/meetup/events`,{
         token: this.state.meetuptoken
       },{
@@ -101,8 +100,9 @@ class Dashboard extends Component {
         console.log('hi')
         console.log(response.data.events);
         let theEvents = response.data.events
-        this.setState({meetupEvents: theEvents});
+        this.setState({meetupEvents: theEvents, loadedMeetup: true});
       })
+    }
     }
     search = (e) => {
       if(this.props.user){
@@ -141,9 +141,9 @@ class Dashboard extends Component {
         return(
           <div>
           {!this.state.meetuptoken &&
-          <div>
-       <h2>Use Meetup</h2>
-       <a href={`https://secure.meetup.com/oauth2/authorize?client_id=r1j6mcrdj6o3dq435ma7kejrg3&response_type=code&redirect_uri=http://localhost:3000/dashboard`}>Link Account</a>
+          <div className='meetup-logo'>
+       <img className='meetup' src='/images/meetuplogo.png'/>
+       <a className='valign-center' href={`https://secure.meetup.com/oauth2/authorize?client_id=r1j6mcrdj6o3dq435ma7kejrg3&response_type=code&redirect_uri=http://localhost:3000/dashboard`}>Link Account</a>
         </div>
         }
         {this.state.meetuptoken &&
@@ -172,7 +172,7 @@ class Dashboard extends Component {
         <ul class="tabs login-tabs">  
         <li class="tab col s4"><a name="places" className='active' onClick={this.toggle}>Places in your city</a></li>  
         <li class="tab col s4"><a name="events" onClick={this.toggle}>Events in your city</a></li>  
-        <li class="tab col s4"><a name="eventbrite" onClick={this.toggle}>Eventbrite</a></li>  
+        <li class="tab col s4"><a name="eventbrite" onClick={this.toggle}>Meetup</a></li>  
         </ul> 
         )
     }

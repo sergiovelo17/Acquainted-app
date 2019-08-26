@@ -13,6 +13,15 @@
 .card-places *{
   margin: 5px 0 !important;
 }
+.meetup-logo{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column
+}
+.meetup{
+  padding: 10px 20%;
+}
 *{
   color: #555B6E 
 }
