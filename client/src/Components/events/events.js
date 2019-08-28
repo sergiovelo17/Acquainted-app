@@ -45,7 +45,7 @@ class Events extends Component {
           </div>
         );
       });
-    else return <h1>No events yet :(</h1>;
+    else return <h1>No events yet</h1>;
   };
   getEvents = () => {
     if (!this.state.stopReload) {
@@ -73,7 +73,7 @@ class Events extends Component {
           </div>
         </div>
       );
-    else return <div id='loading-events'>Loading</div>;
+    else return <div id='loading-events'>Loading...</div>;
   }
 }
 

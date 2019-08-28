@@ -60,7 +60,7 @@ class Dashboard extends Component {
     showMeetup = () =>{
       return this.state.meetupEvents.map((each)=>{
         return (
-          <div class="col s12 m4">
+          <div class="col s12 m6 l4">
           <div class="card horizontal">
             <div class="card-stacked">
               <div class="card-content card-places">
