@@ -22,7 +22,7 @@ class Login extends Component {
       .then((response)=>{
         this.props.getUser()
         setTimeout(()=>{
-          this.props.history.push('/dashboard')
+          this.props.history.push('/')
         },700)
       })
     }

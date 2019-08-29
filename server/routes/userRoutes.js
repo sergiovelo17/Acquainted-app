@@ -201,7 +201,6 @@ res.json({lat: latitude, lng: longitude})
 router.get('/otherUser/:id', async (req,res,next)=>{
   try{
       const user = await User.findById(req.params.id).populate('favoritePlaces').populate('upcomingEvents').populate('pastEvents').populate({ path: 'upcomingEvents', populate: { path: 'location' } });;
-      console.log(user);
       res.json(user); 
   }catch(err){
     res.json(err);
@@ -209,14 +208,9 @@ router.get('/otherUser/:id', async (req,res,next)=>{
 })
 router.post('/meetup', async (req,res,next)=>{
   try{
-    console.log(req.body.code)
-    console.log('here')
-    console.log(process.env.MEETUPKEY,process.env.MEETUPSECRET,process.env.MEETUPURI)
     let response = await axios.post(`https://secure.meetup.com/oauth2/access?client_id=${process.env.MEETUPKEY}&client_secret=${process.env.MEETUPSECRET}&grant_type=authorization_code&redirect_uri=${process.env.MEETUPURI}&code=${req.body.code}`)
-    console.log(response.data,'>>>>>>>>>>>>>');
     res.json(response.data);
   }catch(err){
-    console.log(err);
     res.json({message: 'woah', facts: err.data});
   }
 })
@@ -228,7 +222,6 @@ router.post('/meetup/events', async (req,res,next)=>{
     let response = await axios.get(`https://api.meetup.com/find/upcoming_events?access_token=${req.body.token}&lat=${latitude}&lon=${longitude}`)
     res.json(response.data)
   }catch(err){
-    console.log(err);
     res.json(err);
   }
 })
