@@ -11,7 +11,7 @@ class Dashboard extends Component {
   state = {
     places: true,
     events: false,
-    eventbrite: false,
+    meetup: false,
     stopReload: false,
     searchResults:[],
     currentSearch: '',
@@ -137,7 +137,7 @@ class Dashboard extends Component {
         return(
         <Events ready={this.props.ready} {...this.props} getUser={this.props.getUser}/>
         )
-      }else if(this.state.eventbrite){
+      }else if(this.state.meetup){
         return(
           <div>
           {!this.state.meetuptoken &&
@@ -160,11 +160,11 @@ class Dashboard extends Component {
     } 
     toggle = (e) => {
       if(e.target.name === 'places' && this.state.places === false){
-        this.setState({places: true, events: false, eventbrite: false})
+        this.setState({places: true, events: false, meetup: false})
       }else if(e.target.name === 'events' && this.state.events === false){
-        this.setState({places: false, events: true, eventbrite: false})
-      }else if(e.target.name === 'eventbrite' && this.state.eventbrite === false){
-        this.setState({places: false, events: false, eventbrite: true})
+        this.setState({places: false, events: true, meetup: false})
+      }else if(e.target.name === 'meetup' && this.state.meetup === false){
+        this.setState({places: false, events: false, meetup: true})
       }
     }
     renderButtons = () => {
@@ -172,7 +172,7 @@ class Dashboard extends Component {
         <ul class="tabs login-tabs">  
         <li class="tab col s4"><a name="places" className='active' onClick={this.toggle}>Places in your city</a></li>  
         <li class="tab col s4"><a name="events" onClick={this.toggle}>Events in your city</a></li>  
-        <li class="tab col s4"><a name="eventbrite" onClick={this.toggle}>Meetup</a></li>  
+        <li class="tab col s4"><a name="meetup" onClick={this.toggle}>Meetup</a></li>  
         </ul> 
         )
     }
