@@ -70,14 +70,12 @@ router.get('/byCity/:radius?', async (req, res, next) => {
 router.post('/placeDetails/:id', async (req,res,next)=>{
   try{
 
-    console.log('yo')
     // console.log(req.params.id)
     // console.log('<<<<<<<<reached here!!!!')
       const place = await Places.findOne({placeId: req.params.id})
       const user = await User.findById(req.body.user_id)
       let isFavorited = false;
       if(place){
-        console.log('retrieved from databse')
         if(user.favoritePlaces.includes(place._id)){
           isFavorited = true;
         }
@@ -210,9 +208,6 @@ router.get('/nextpage/:token', async(req,res,next)=>{
 })
 router.post('/query',async(req,res,next)=>{
   try{
-    // console.log(req.body.user);
-    // console.log('----------------------')
-    // console.log(req.body.input);
     const sessionToken = req.body.user._id;
     const geoResult = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${req.body.user.acquaintedCity}&key=${process.env.GEOCODE}`);
     const longitude = geoResult.data.results[0].geometry.lng;
