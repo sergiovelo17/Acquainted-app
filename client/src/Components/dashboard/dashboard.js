@@ -143,7 +143,7 @@ class Dashboard extends Component {
           {!this.state.meetuptoken &&
           <div className='meetup-logo'>
        <img className='meetup' src='/images/meetuplogo.png'/>
-       <a className='valign-center' href={`https://secure.meetup.com/oauth2/authorize?client_id=r1j6mcrdj6o3dq435ma7kejrg3&response_type=code&redirect_uri=http://localhost:3000/dashboard`}>Link Account</a>
+       <a className='valign-center' href={`https://secure.meetup.com/oauth2/authorize?client_id=5usaaofq5tdlgp8t8os5s1eups&response_type=code&redirect_uri=https://acquainted-app.herokuapp.com/dashboard`}>Link Account</a>
         </div>
         }
         {this.state.meetuptoken &&
