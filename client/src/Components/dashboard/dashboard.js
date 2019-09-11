@@ -170,9 +170,9 @@ class Dashboard extends Component {
     renderButtons = () => {
         return(
         <ul class="tabs login-tabs">  
-        <li class="tab col s4"><a name="places" className='active' onClick={this.toggle}>Places in your city</a></li>  
-        <li class="tab col s4"><a name="events" onClick={this.toggle}>Events in your city</a></li>  
-        <li class="tab col s4"><a name="meetup" onClick={this.toggle}>Meetup</a></li>  
+        <li class="tab col s6"><a name="places" className='active' onClick={this.toggle}>Places in your city</a></li>  
+        <li class="tab col s6"><a name="events" onClick={this.toggle}>Events in your city</a></li>  
+        {/* <li class="tab col s4"><a name="meetup" onClick={this.toggle}>Meetup</a></li>   */}
         </ul> 
         )
     }
